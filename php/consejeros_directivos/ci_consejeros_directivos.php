@@ -21,8 +21,9 @@ class ci_consejeros_directivos extends ci_principal
 	{
             if ($this->controlador->s__fecha != NULL){
                 $f= date_create($this->controlador->s__fecha);
-                print_r(date_format($f, 'd-m-Y'));
+                $this->pantalla('pant_estudiantes')->set_titulo($this->pantalla('pant_estudiantes')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
+            //revisar!!! compara dir asentamiento nivel=3
             if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
                 //Casos especiales cons. dir de asentamiento tiene 3 puestos
                 $cargos = 3;                
@@ -60,11 +61,17 @@ class ci_consejeros_directivos extends ci_principal
                 foreach($listas as $pos=>$lista){
                     //Agrego la cant de escaños obtenidos para esta lista
                     // cant de votos obtenidos / menor cociente
-                    $c = $lista['votos'] / $ar[$cargos-1];
+                     if($ar[$cargos-1] == 0)//División por cero
+                        $c = 0;
+                    else
+                        $c = $lista['votos'] / $ar[$cargos-1];
+                    
+                    //$c = $lista['votos'] / $ar[$cargos-1];
                     $listas[$pos]['final'] = floor($c);
                     
-                    $p = array_search($ar[$i], $lista);
-                        if($p != null){//Encontro el valor en esta fila
+                    //Resalta los mayores
+                    $p = array_search($ar[$i], $lista, TRUE);
+                        if($p != null){//Encontró el valor en esta fila
                             if(strcmp($p, "votos")==0){//Encontro que esta en el campo 'votos' entonces hay que resaltar n°votos/1
                                 $valor = "<span style='color:red'>".$listas[$pos][1]."</span>";
                                 $listas[$pos][1] = $valor;
@@ -93,9 +100,8 @@ class ci_consejeros_directivos extends ci_principal
 	{
             if ($this->controlador->s__fecha != NULL){
                 $f= date_create($this->controlador->s__fecha);
-                print_r(date_format($f, 'd-m-Y'));
+                $this->pantalla('pant_graduados')->set_titulo($this->pantalla('pant_graduados')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
-            
             $listas = $this->controlador()->dep('datos')->tabla('voto_lista_cdirectivo')->get_listas_con_total_votos(4,$this->controlador->s__unidad, $this->controlador->s__fecha);
             
             $ar = array();
@@ -150,7 +156,7 @@ class ci_consejeros_directivos extends ci_principal
 	{
             if ($this->controlador->s__fecha != NULL){
                 $f= date_create($this->controlador->s__fecha);
-                print_r(date_format($f, 'd-m-Y'));
+                $this->pantalla('pant_no_docente')->set_titulo($this->pantalla('pant_no_docente')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
             if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
                 //Casos especiales cons. dir de asentamiento tiene 2 puestos
@@ -222,7 +228,7 @@ class ci_consejeros_directivos extends ci_principal
 	{
             if ($this->controlador->s__fecha != NULL){
                 $f= date_create($this->controlador->s__fecha);
-                print_r(date_format($f, 'd-m-Y'));
+                $this->pantalla('pant_docente')->set_titulo($this->pantalla('pant_docente')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
            /* if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
                 //Casos especiales cons. dir de asentamiento tiene 3 puestos

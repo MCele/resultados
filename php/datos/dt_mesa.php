@@ -28,9 +28,11 @@ class dt_mesa extends resultados_datos_tabla {
 		FROM
 			mesa as t_m	
                         LEFT OUTER JOIN claustro as t_c ON (t_m.id_claustro = t_c.id)
-			LEFT OUTER JOIN sede as t_s ON (t_m.id_sede = t_s.id_sede) 
+			left outer join acta on acta.de=t_m.id_mesa 
+                        LEFT OUTER JOIN sede as t_s ON (acta.id_sede = t_s.id_sede) 
+                        
                         LEFT OUTER JOIN unidad_electoral as t_ue ON (t_s.id_ue = t_ue.id_nro_ue)
-                        left outer join acta on acta.para=t_m.id_mesa
+                        
                         inner join voto_lista_csuperior t_vls on t_vls.id_acta=acta.id_acta 
                         $where
                         AND t_m.fecha = $fecha 
@@ -93,7 +95,7 @@ class dt_mesa extends resultados_datos_tabla {
         return $ar[0];
     }
 
-    function cant_empadronados($id_nro_ue, $id_claustro, $fecha) {
+    function cant_empadronados($id_nro_ue, $id_claustro,$id_tipo_acta=1, $fecha) {
         if($fecha == NULL){
                 $fecha = "(SELECT max(fecha) FROM mesa)";
             }
@@ -101,12 +103,14 @@ class dt_mesa extends resultados_datos_tabla {
                 $fecha = "'$fecha'";
             }
                 
-        $sql = "SELECT sum(t_m.cant_empadronados) as cant FROM mesa t_m "
-                . "INNER JOIN sede t_s ON t_s.id_sede = t_m.id_sede"
-                . " INNER JOIN unidad_electoral t_ue ON t_ue.id_nro_ue = t_s.id_ue "
-                . "WHERE t_ue.id_nro_ue = $id_nro_ue"
-                . "AND t_m.id_claustro = $id_claustro"
-                . "AND t_m.fecha = $fecha";
+        $sql = "SELECT sum(t_m.cant_empadronados) as cant FROM unidad_electoral t_ue "
+                    . "INNER JOIN sede t_s ON t_ue.id_nro_ue = t_s.id_ue "
+                    . " inner JOIN acta t_a ON t_s.id_sede = t_a.id_sede"
+                        . " inner JOIN mesa t_m  ON t_a.de = t_m.id_mesa "
+                    . "WHERE t_ue.id_nro_ue = $id_nro_ue"
+                    . " AND t_a.id_tipo = $id_tipo_acta "
+                    . "AND t_m.id_claustro = $id_claustro "
+                    . "AND t_m.fecha = $fecha";
         $ar = toba::db('resultados')->consultar($sql);
         return $ar[0]['cant'];
     }
@@ -171,7 +175,6 @@ class dt_mesa extends resultados_datos_tabla {
         $sql = "SELECT count(id_mesa) as porc FROM mesa "
                 . "WHERE fecha = $fecha "
                 . "AND estado > 1 "
-                . "AND ficticio = false "
                 . "AND id_claustro = $id_claustro";
         $ar = toba::db('resultados')->consultar($sql);
         return $ar[0]['porc'];
@@ -187,7 +190,6 @@ class dt_mesa extends resultados_datos_tabla {
         $sql = "SELECT count(id_mesa) as porc FROM mesa "
                 . "WHERE fecha = $fecha "
                 . "AND estado >= 3 "
-                . "AND ficticio = false "
                 . "AND id_claustro = $id_claustro";
         $ar = toba::db('resultados')->consultar($sql);
         return $ar[0]['porc'];
@@ -203,7 +205,6 @@ class dt_mesa extends resultados_datos_tabla {
            $sql = "SELECT count(id_mesa) as porc FROM mesa "
                 . "WHERE fecha = $fecha "
                 . "AND estado = 4"
-                . "AND ficticio = false "
                 . "AND id_claustro = $id_claustro";
         $ar = toba::db('resultados')->consultar($sql);
         return $ar[0]['porc'];
@@ -219,13 +220,12 @@ class dt_mesa extends resultados_datos_tabla {
          
         $sql = "SELECT count(id_mesa) as total FROM mesa "
                 . "WHERE fecha = $fecha "
-                . "AND ficticio = false "
                 . "AND id_claustro = $id_claustro";
         $ar = toba::db('resultados')->consultar($sql);
         return $ar[0]['total'];
     }
 
-    function get_de_usr($usuario) {
+    function get_de_usr($usuario) {  //VER!!! ????
         $sql = "SELECT id_mesa FROM mesa WHERE autoridad LIKE '$usuario'";
         return toba::db('resultados')->consultar($sql);
     }
@@ -255,7 +255,6 @@ class dt_mesa extends resultados_datos_tabla {
                             LEFT JOIN sede t_sde ON (t_sde.id_sede = t_m.id_sede)
                             LEFT JOIN unidad_electoral t_ude ON (t_ude.id_nro_ue = t_sde.id_ue)
                             WHERE t_m.fecha = (SELECT max(fecha) FROM mesa ) 
-                            AND t_m.ficticio = false 
                          $where ORDER BY t_ude.id_nro_ue";
 
             return toba::db('resultados')->consultar($sql);
@@ -272,10 +271,8 @@ class dt_mesa extends resultados_datos_tabla {
                     . "para "
                     . "FROM acta as t_a "
                     . "LEFT JOIN tipo as t_t ON (t_t.id_tipo = t_a.id_tipo) 
-                        LEFT JOIN mesa t_de ON (t_de.id_mesa = t_a.de)
-                        LEFT JOIN mesa t_para ON (t_para.id_mesa = t_a.para)
-                        WHERE t_de.fecha = (SELECT max(fecha) FROM mesa )"
-                    . " AND t_para.fecha = (SELECT max(fecha) FROM mesa )"
+                       LEFT JOIN mesa t_de ON (t_de.id_mesa = t_a.de)
+                       WHERE t_de.fecha = (SELECT max(fecha) FROM mesa )"
                     . "ORDER BY id_acta";
 
             return toba::db('resultados')->consultar($sql);
@@ -308,9 +305,10 @@ class dt_mesa extends resultados_datos_tabla {
 		FROM
 			mesa as t_m	
                         LEFT OUTER JOIN claustro as t_c ON (t_m.id_claustro = t_c.id)
-			LEFT OUTER JOIN sede as t_s ON (t_m.id_sede = t_s.id_sede) 
+			left outer join acta on acta.de=t_m.id_mesa
+                        LEFT OUTER JOIN sede as t_s ON (acta.id_sede = t_s.id_sede) 
                         LEFT OUTER JOIN unidad_electoral as t_ue ON (t_s.id_ue = t_ue.id_nro_ue)
-                        left outer join acta on acta.para=t_m.id_mesa
+                        
                         left outer join voto_lista_cdirectivo t_vld on t_vld.id_acta=acta.id_acta
                          
                         $where
@@ -347,7 +345,9 @@ class dt_mesa extends resultados_datos_tabla {
         if (!is_null($filanueva)) {
             $filanueva['total'] = $total;
             $resumen[] = $filanueva;
-        }
+    
+         }
+         print_r($resumen);
         return $resumen;
     }
     

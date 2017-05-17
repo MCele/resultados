@@ -39,33 +39,48 @@ class ci_mesas_superior extends toba_ci {
 
         if ($this->s__fecha != NULL){
                 $f= date_create($this->s__fecha);
-                print_r(date_format($f, 'd-m-Y'));
+                $this->pantalla('pant_inicial')->set_titulo($this->pantalla('pant_inicial')->get_titulo()."  ".date_format($f, 'd-m-Y'));
         }
         
         $listas = $this->dep('datos')->tabla('lista_csuperior')->get_listas_actuales($claustro, $this->s__fecha);
 
         //Agregar las etiquetas de todas las listas
         $columnas=array();
+        
+        $b['clave'] = 'total';
+        $b['titulo'] = 'Total Votos';
+        $b['estilo'] = 'col-cuadro-listas';
+        $b['estilo_titulo'] = 'tit-cuadro-resultados-mesas';
+        $columnas[] = $b;
+
         foreach ($listas as $lista) {
             $l['clave'] = $lista['id_nro_lista'];
             $l['titulo'] = $lista['nombre'];
+            $l['estilo'] = 'col-cuadro-listas';
+            $l['estilo_titulo'] = 'tit-cuadro-resultados-mesas';
             $l['total']=true;
             $columnas[] = $l;
         }
         //Agregar datos totales de blancos, nulos y recurridos
         $b['clave'] = 'total_votos_blancos';
         $b['titulo'] = 'Blancos';
+        $b['estilo'] = 'col-cuadro-listas';
+        //$b['estilo_titulo'] = 'tit-cuadro-resultados-mesas';
         $b['total']=true;
         $columnas[] = $b;
 
         $b['clave'] = 'total_votos_nulos';
         $b['titulo'] = 'Nulos';
+        $b['estilo'] = 'col-cuadro-listas';
         $columnas[] = $b;
 
         $b['clave'] = 'total_votos_recurridos';
         $b['titulo'] = 'Recurridos';
+        $b['estilo'] = 'col-cuadro-listas';
         $columnas[] = $b;
         
+        
+        //VER!!! Hay que repetir pero ver porqué si no no da el total de votos
         $b['clave'] = 'total';
         $b['titulo'] = 'Total Votos';
         

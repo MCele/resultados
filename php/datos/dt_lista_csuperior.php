@@ -19,9 +19,9 @@ class dt_lista_csuperior extends resultados_datos_tabla
             else{
                 $fecha = "'$fecha'";
             }
-            $sql = "SELECT id_nro_lista, nombre FROM lista_csuperior "
+            $sql = "SELECT id_nro_lista, nombre, sigla FROM lista_csuperior "
                     . "WHERE fecha = $fecha $where "
-                    . "ORDER BY id_nro_lista";
+                    . "order by nombre"; //. "ORDER BY id_nro_lista";
             return toba::db('resultados')->consultar($sql);
         }
         

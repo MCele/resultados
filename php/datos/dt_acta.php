@@ -177,7 +177,8 @@ class dt_acta extends resultados_datos_tabla
             
 	}
         
-        //usado por ci_consejeros_superior
+        //usado por ci_consejeros_superior y direcivo cant de votos blancos, nulos y recurridos 
+        //para una u_e, tipo(sup, dir) y claustro
         function cant_b_n_r($id_ue, $id_claustro, $id_tipo, $fecha){
             if($fecha == NULL){
                 $fecha = "(SELECT max(fecha) FROM mesa)";
@@ -186,10 +187,12 @@ class dt_acta extends resultados_datos_tabla
                 $fecha = "'$fecha'";
             }
                 
-            $sql = "SELECT sum(total_votos_blancos) as blancos, sum(total_votos_nulos) as nulos, sum(total_votos_recurridos) as recurridos"
+            $sql = "SELECT sum(total_votos_blancos) as blancos, "
+                    . "sum(total_votos_nulos) as nulos, "
+                    . "sum(total_votos_recurridos) as recurridos"
                     . " FROM acta t_a"
-                    . " INNER JOIN mesa t_m ON (t_m.id_mesa = t_a.para)"
-                    . " INNER JOIN sede t_s ON (t_m.id_sede = t_s.id_sede)"
+                    . " INNER JOIN mesa t_m ON (t_m.id_mesa = t_a.de)"
+                    . " INNER JOIN sede t_s ON (t_a.id_sede = t_s.id_sede)"
                     . " WHERE t_s.id_ue = $id_ue "
                     . " AND t_m.id_claustro = $id_claustro "
                     . " AND t_a.id_tipo = $id_tipo"
