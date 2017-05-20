@@ -97,19 +97,19 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'nro_mesa', --clave
 	'3', --orden
 	'Mesa', --titulo
-	'ei-cuadro-col-tit', --estilo_titulo
-	'0', --estilo
+	'tit-cuadro-resultados-mesas', --estilo_titulo
+	'col-cuadro-listas', --estilo
 	NULL, --ancho
 	'1', --formateo
 	NULL, --vinculo_indice
-	NULL, --no_ordenar
+	'0', --no_ordenar
 	NULL, --mostrar_xls
 	NULL, --mostrar_pdf
 	NULL, --pdf_propiedades
 	NULL, --desabilitado
-	NULL, --total
+	'0', --total
 	NULL, --total_cc
-	NULL, --usar_vinculo
+	'0', --usar_vinculo
 	NULL, --vinculo_carpeta
 	NULL, --vinculo_item
 	NULL, --vinculo_popup
@@ -127,9 +127,9 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'3000', --objeto_cuadro_col
 	'cant_empadronados', --clave
 	'4', --orden
-	'Cant Emp', --titulo
-	'ei-cuadro-col-tit', --estilo_titulo
-	'0', --estilo
+	'Cantidad Empadronados', --titulo
+	'tit-cuadro-resultados-mesas', --estilo_titulo
+	'col-cuadro-listas', --estilo
 	NULL, --ancho
 	'1', --formateo
 	NULL, --vinculo_indice
@@ -159,19 +159,19 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'sede', --clave
 	'2', --orden
 	'Sede', --titulo
-	'ei-cuadro-col-tit', --estilo_titulo
-	'0', --estilo
+	'tit-cuadro-resultados-mesas', --estilo_titulo
+	'col-cuadro-listas', --estilo
 	NULL, --ancho
 	'1', --formateo
 	NULL, --vinculo_indice
-	NULL, --no_ordenar
+	'0', --no_ordenar
 	NULL, --mostrar_xls
 	NULL, --mostrar_pdf
 	NULL, --pdf_propiedades
 	NULL, --desabilitado
-	NULL, --total
+	'0', --total
 	NULL, --total_cc
-	NULL, --usar_vinculo
+	'0', --usar_vinculo
 	NULL, --vinculo_carpeta
 	NULL, --vinculo_item
 	NULL, --vinculo_popup
@@ -190,19 +190,19 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'unidad', --clave
 	'1', --orden
 	'Unidad Electoral', --titulo
-	'ei-cuadro-col-tit', --estilo_titulo
-	'4', --estilo
+	'tit-cuadro-resultados-mesas', --estilo_titulo
+	'col-cuadro-listas', --estilo
 	NULL, --ancho
 	'1', --formateo
 	NULL, --vinculo_indice
-	NULL, --no_ordenar
+	'0', --no_ordenar
 	NULL, --mostrar_xls
 	NULL, --mostrar_pdf
 	NULL, --pdf_propiedades
 	NULL, --desabilitado
-	NULL, --total
+	'0', --total
 	NULL, --total_cc
-	NULL, --usar_vinculo
+	'0', --usar_vinculo
 	NULL, --vinculo_carpeta
 	NULL, --vinculo_item
 	NULL, --vinculo_popup

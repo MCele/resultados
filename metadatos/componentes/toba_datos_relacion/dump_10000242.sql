@@ -99,6 +99,24 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --inicializar
 	'3'  --orden
 );
+--- FIN Grupo de desarrollo 10
+
+--- INICIO Grupo de desarrollo 2
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'resultados', --proyecto
+	'2000053', --dep_id
+	'10000242', --objeto_consumidor
+	'2000005', --objeto_proveedor
+	'sede', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	'6'  --orden
+);
+--- FIN Grupo de desarrollo 2
+
+--- INICIO Grupo de desarrollo 10
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'resultados', --proyecto
 	'10000346', --dep_id

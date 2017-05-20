@@ -347,7 +347,7 @@ class dt_mesa extends resultados_datos_tabla {
             $resumen[] = $filanueva;
     
          }
-         print_r($resumen);
+         //print_r($resumen);
         return $resumen;
     }
     
