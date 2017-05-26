@@ -1,6 +1,11 @@
 <?php
 class ci_mesas_directivo extends resultados_ci
 {
+    //probar que todo está ok con el servidor y subirlo
+    //OK - ver por fecha que no muestra las listas del historial 
+    //OK - auza asma en resultados mesas superior o directivo cambiar por tipo asentamiento 3 en la cantidad de bancas
+    //OK - mostrar todo el historial de entrada y que si quieren se puede filtrar y ahi si funciona como siempre 
+    
         protected $s__id_claustro;
         protected $s__id_unidad_electoral;
         protected $s__datos_filtro;
@@ -29,13 +34,22 @@ class ci_mesas_directivo extends resultados_ci
                 $unidad_electoral = 1;
             }
 
-            $listas = $this->dep('datos')->tabla('lista_cdirectivo')->get_listas_actuales($claustro,$unidad_electoral);
+            $listas = $this->dep('datos')->tabla('lista_cdirectivo')->get_listas_actuales($claustro,$unidad_electoral, $this->s__fecha);
 
             //Agregar las etiquetas de todas las listas
             $columnas = array();
+            
+            $b['clave'] = 'total';
+            $b['titulo'] = 'Total Votos';
+            $b['estilo'] = 'col-cuadro-listas';
+            $b['estilo_titulo'] = 'tit-cuadro-resultados-mesas';
+            $columnas[] = $b;
+            
             foreach ($listas as $lista) {
                 $l['clave'] = $lista['id_nro_lista'];
                 $l['titulo'] = $lista['nombre'];
+                $l['estilo'] = 'col-cuadro-listas';
+                $l['estilo_titulo'] = 'tit-cuadro-resultados-mesas';
                 $l['total'] = true;
                 $columnas[] = $l;
             }
@@ -63,6 +77,7 @@ class ci_mesas_directivo extends resultados_ci
             $datos = $this->dep('datos')->tabla('mesa')->get_listado_votos_directivo('t_m.id_claustro=' . $claustro .'AND t_ue.id_nro_ue='.$unidad_electoral, $this->s__fecha);
             
             $cuadro->set_datos($datos);
+            
     }
 
 	//---- Formulario -------------------------------------------------------------------

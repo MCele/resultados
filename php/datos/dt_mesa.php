@@ -9,7 +9,7 @@ class dt_mesa extends resultados_datos_tabla {
           else{
                $fecha = "'$fecha'";
           }
-        $where = "WHERE t_ue.sigla not in ('ASMA','AUZA') ";
+        $where = "WHERE t_ue.nivel != 3 ";
         if (isset($wherefiltro)) {
             $where .= " and $wherefiltro ";
         }
@@ -267,8 +267,7 @@ class dt_mesa extends resultados_datos_tabla {
                     . "total_votos_recurridos,"
                     . "t_a.id_tipo,"
                     . "t_t.descripcion as tipo,"
-                    . "de,"
-                    . "para "
+                    . "de "
                     . "FROM acta as t_a "
                     . "LEFT JOIN tipo as t_t ON (t_t.id_tipo = t_a.id_tipo) 
                        LEFT JOIN mesa t_de ON (t_de.id_mesa = t_a.de)
@@ -353,9 +352,9 @@ class dt_mesa extends resultados_datos_tabla {
     
     function get_listado_elecciones_periodo($whereperiodo = null) 
      {
-        $where = "WHERE ";
+        $where = " ";
         if (isset($whereperiodo)) {
-            $where .= " $whereperiodo ";    
+            $where .= "WHERE $whereperiodo ";    
         }
         $sql2 = "select cant_unidad, cant_claustro from "
                 . "(Select count(*)  as cant_unidad from unidad_electoral) as unidad,"

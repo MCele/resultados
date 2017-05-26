@@ -56,7 +56,7 @@ class dt_acta extends resultados_datos_tabla
             return toba::db('resultados')->consultar($sql);
 	}
 
-        function get_descripciones($de = null, $para = null)
+        function get_descripciones($de = null)
 	{
             $where = array();
             if(isset($de) && isset($para)){
@@ -65,9 +65,6 @@ class dt_acta extends resultados_datos_tabla
             else{
                 if(isset($de)){
                     $where = "WHERE de=$de";
-                }
-                if(isset($para)){
-                    $where = "WHERE para=$para";
                 }
             }
             
@@ -162,14 +159,12 @@ class dt_acta extends resultados_datos_tabla
                     . "total_votos_recurridos,"
                     . "t_a.id_tipo,"
                     . "t_t.descripcion as tipo,"
-                    . "de,"
-                    . "para "
+                    . "de "
                     . "FROM acta as t_a "
                     . "LEFT JOIN tipo as t_t ON (t_t.id_tipo = t_a.id_tipo) 
                         LEFT JOIN mesa t_de ON (t_de.id_mesa = t_a.de)
-                        LEFT JOIN mesa t_para ON (t_para.id_mesa = t_a.para)
+                        LEFT JOIN sede t_s ON (t_s.id_sede = t_a.id_sede)
                         WHERE t_de.fecha = (SELECT max(fecha) FROM mesa )"
-                        ." AND t_para.fecha = (SELECT max(fecha) FROM mesa )"
                     . "ORDER BY id_acta";
             
                 return toba::db('resultados')->consultar($sql);
@@ -199,6 +194,7 @@ class dt_acta extends resultados_datos_tabla
                     . " AND t_m.fecha = $fecha"
                     . " AND t_m.estado > 1";
             return toba::db('resultados')->consultar($sql);
+            
         }
         
 }

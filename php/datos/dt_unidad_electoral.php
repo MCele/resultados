@@ -30,7 +30,7 @@ class dt_unidad_electoral extends resultados_datos_tabla
 	function get_descripciones_ponderados()
 	{       
             $sql = "SELECT id_nro_ue, nombre, sigla FROM unidad_electoral "
-                    . "where sigla not in ('ASMA','AUZA') ORDER BY nombre";
+                    . "where nivel!=3 ORDER BY nombre";
             return toba::db('resultados')->consultar($sql);
 	}
         

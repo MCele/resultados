@@ -62,7 +62,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	NULL, --ayuda
 	'1', --orden
 	NULL, --ci_predep
-	'0', --implicito
+	'1', --implicito
 	'0', --defecto
 	NULL, --display_datos_cargados
 	NULL, --grupo
@@ -122,7 +122,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	NULL, --template
+	'', --template
 	NULL  --template_impresion
 );
 
@@ -154,7 +154,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_descripciones', --carga_metodo
+	'get_descripciones_nivel_directivo', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	'10000257', --carga_dt

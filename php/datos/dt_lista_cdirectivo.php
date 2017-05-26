@@ -60,15 +60,21 @@ class dt_lista_cdirectivo extends resultados_datos_tabla
 		return toba::db('resultados')->consultar($sql);
 	}
         
-        function get_listas_actuales($id_claustro = null, $id_ue = null)
+        function get_listas_actuales($id_claustro = null, $id_ue = null, $fecha=NULL)
         {
             $where = "";
             if(isset($id_claustro)&&(isset($id_ue))){    //Se pide de un claustro y unidad electoral especificos
                 $where = "AND id_claustro = $id_claustro AND id_ue = $id_ue";
             }
+            if($fecha==NULL){
+                $fecha = "(SELECT max(fecha) FROM lista_cdirectivo) ";
+            }
+            else{
+                $fecha = "'$fecha'";
+            }
             
             $sql = "SELECT id_nro_lista, nombre FROM lista_cdirectivo "
-                    . "WHERE fecha = (SELECT max(fecha) FROM lista_cdirectivo ) $where "
+                    . "WHERE fecha = $fecha $where "
                     . "ORDER BY id_nro_lista";
             return toba::db('resultados')->consultar($sql);
         }

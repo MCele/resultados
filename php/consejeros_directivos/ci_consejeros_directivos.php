@@ -23,8 +23,9 @@ class ci_consejeros_directivos extends ci_principal
                 $f= date_create($this->controlador->s__fecha);
                 $this->pantalla('pant_estudiantes')->set_titulo($this->pantalla('pant_estudiantes')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
-            //revisar!!! compara dir asentamiento nivel=3
-            if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
+            //compara directivo asentamiento nivel=3 tiene 3 cargos 
+            $nivel = $this->controlador()->dep('datos')->tabla('unidad_electoral')->get_nivel($this->controlador->s__unidad);      
+            if($nivel['nivel'] == 3){
                 //Casos especiales cons. dir de asentamiento tiene 3 puestos
                 $cargos = 3;                
             }
@@ -158,7 +159,9 @@ class ci_consejeros_directivos extends ci_principal
                 $f= date_create($this->controlador->s__fecha);
                 $this->pantalla('pant_no_docente')->set_titulo($this->pantalla('pant_no_docente')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
-            if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
+             //compara niveles: asentamiento nivel=3 tiene 2 cargos para no docente 
+            $nivel = $this->controlador()->dep('datos')->tabla('unidad_electoral')->get_nivel($this->controlador->s__unidad);
+            if($nivel['nivel'] == 3){
                 //Casos especiales cons. dir de asentamiento tiene 2 puestos
                 $cargos = 2;                
             }
@@ -230,7 +233,8 @@ class ci_consejeros_directivos extends ci_principal
                 $f= date_create($this->controlador->s__fecha);
                 $this->pantalla('pant_docente')->set_titulo($this->pantalla('pant_docente')->get_titulo()."  ".date_format($f, 'd-m-Y'));
             }
-           /* if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
+           /*//ambiar lo siguiente por nivel = 3 (ver en proyecto gu_kena)
+            *  if($this->controlador->s__unidad == 17 || $this->controlador->s__unidad == 18){
                 //Casos especiales cons. dir de asentamiento tiene 3 puestos
                 $cargos = 6;                
             }
@@ -307,23 +311,61 @@ class ci_consejeros_directivos extends ci_principal
 	//-----------------------------------------------------------------------------------
 	function conf__form_dato_e(resultados_ei_formulario $form)
 	{
-            //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro estudiante y tipo directivo=2
-            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 3, 2, $this->controlador->s__fecha);
-            return $ar[0];
+            //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro estudiante y tipo directivo
+            $u_e = $this->controlador->s__unidad;
+            
+            $nivel = $this->controlador()->dep('datos')->tabla('unidad_electoral')->get_nivel($u_e);
+            if($nivel['nivel']==3){ //id_tipo = 3 => Directivo Asentamiento
+                $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 3, 3, $this->controlador->s__fecha);
+            }
+            else{   //id_tipo = 2 => Directivo
+                    $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 3, 2, $this->controlador->s__fecha);
+            }
+          return $ar[0];
+            
+            
+            
+//            $tipo = array(2,3); //tipo 2:directivo y 3 :directivo asentamiento
+//            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 3, $tipo, $this->controlador->s__fecha);
+//            return $ar[0];
         }
         
         function conf__form_dato_g(resultados_ei_formulario $form)
 	{
-            //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro graduados y tipo directivo=2
-            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 4, 2, $this->controlador->s__fecha);
-            return $ar[0];
+            //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro graduados y tipo directivo
+             $u_e = $this->controlador->s__unidad;
+            
+            $nivel = $this->controlador()->dep('datos')->tabla('unidad_electoral')->get_nivel($u_e);
+            if($nivel['nivel']==3){  //id_tipo = 3 => Directivo Asentamiento
+                $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 4, 3, $this->controlador->s__fecha);
+            }
+            else{    //id_tipo = 2 => Directivo
+                    $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 4, 2, $this->controlador->s__fecha);
+            }
+          return $ar[0];
+//            $tipo = array(2,3); //tipo 2:directivo y 3 :directivo asentamiento
+//            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 4, $tipo, $this->controlador->s__fecha);
+//            return $ar[0];
         }
         
         function conf__form_dato_nd(resultados_ei_formulario $form)
 	{
-            //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro no docente y tipo directivo=2
-            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 1, 2, $this->controlador->s__fecha);
-            return $ar[0];
+          //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro no docente y tipo directivo=2/3
+            $u_e = $this->controlador->s__unidad;
+            
+            $nivel = $this->controlador()->dep('datos')->tabla('unidad_electoral')->get_nivel($u_e);
+            if($nivel['nivel']==3){   //id_tipo = 3 => Directivo Asentamiento
+                $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 1, 3, $this->controlador->s__fecha);
+            }
+            else{      //id_tipo = 2 => Directivo
+                    $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($u_e, 1, 2, $this->controlador->s__fecha);
+            }
+          return $ar[0];
+
+        //Agrega la cantidad de votos blancos,nulos y recurridos calculado en acta para cada unidad con claustro no docente y tipo directivo
+//            $tipo = array(2,3); //tipo 2:directivo y 3 :directivo asentamiento
+//            $ar = $this->controlador()->dep('datos')->tabla('acta')->cant_b_n_r($this->controlador->s__unidad, 1, $tipo, $this->controlador->s__fecha);
+//            return $ar[0];
         }
         
         //-----------------------------------------------------------------------------------

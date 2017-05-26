@@ -46,6 +46,10 @@ class ci_historial extends resultados_ci
 
 	function conf__cuadro(toba_ei_cuadro $cuadro)
 	{
+            //se muestran todos los datos en el historial
+            $aux = $this->dep('datos')->tabla('mesa')->get_listado_elecciones_periodo(null);
+            $cuadro->set_datos($aux);
+            //se usan filtros para cargar algunos datos por periodo entre dos fechas
             if(isset($this->s__fecha_desde) && (isset($this->s__fecha_hasta))){
                 $aux = $this->dep('datos')->tabla('mesa')->get_listado_elecciones_periodo( 'm.fecha between \''.$this->s__fecha_desde .'\' AND \''.$this->s__fecha_hasta .'\' '); 
                 $cuadro->set_datos($aux);
