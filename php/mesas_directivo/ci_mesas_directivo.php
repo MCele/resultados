@@ -1,10 +1,6 @@
 <?php
 class ci_mesas_directivo extends resultados_ci
 {
-    //probar que todo está ok con el servidor y subirlo
-    //OK - ver por fecha que no muestra las listas del historial 
-    //OK - auza asma en resultados mesas superior o directivo cambiar por tipo asentamiento 3 en la cantidad de bancas
-    //OK - mostrar todo el historial de entrada y que si quieren se puede filtrar y ahi si funciona como siempre 
     
         protected $s__id_claustro;
         protected $s__id_unidad_electoral;
@@ -35,8 +31,9 @@ class ci_mesas_directivo extends resultados_ci
             }
 
             $listas = $this->dep('datos')->tabla('lista_cdirectivo')->get_listas_actuales($claustro,$unidad_electoral, $this->s__fecha);
-
-            //Agregar las etiquetas de todas las listas
+            
+            if (sizeof($listas)>0){
+                //Agregar las etiquetas de todas las listas
             $columnas = array();
             
             $b['clave'] = 'total';
@@ -77,6 +74,9 @@ class ci_mesas_directivo extends resultados_ci
             $datos = $this->dep('datos')->tabla('mesa')->get_listado_votos_directivo('t_m.id_claustro=' . $claustro .'AND t_ue.id_nro_ue='.$unidad_electoral, $this->s__fecha);
             
             $cuadro->set_datos($datos);
+                
+            }
+            
             
     }
 
